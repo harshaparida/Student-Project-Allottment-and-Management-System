@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Add Student</title>
+</head>
+<body>
+    <header>
+        <h1>Add Student</h1>
+    </header>
+    <div class="container">
+        <form method="POST" action="{{ url_for('add_student') }}">
+            <label for="roll_number">Roll Number</label>
+            <input type="text" name="roll_number" required>
+
+            <label for="username">Student Username</label>
+            <input type="text" name="username" required>
+
+            <label for="email">Student Email</label>
+            <input type="email" name="email" required>
+
+            <label for="cgpa">Student CGPA</label>
+            <input type="text" name="cgpa" required>
+
+            <button type="submit">Add Student</button>
+        </form>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>
