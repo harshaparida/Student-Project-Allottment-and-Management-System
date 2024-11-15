@@ -101,6 +101,8 @@
 #
 # if __name__ == '__main__':
 #     app.run(debug=True)
+
+
 from flask import Flask, request, render_template, redirect, url_for, flash, session
 import mysql.connector
 from mysql.connector import Error
@@ -113,7 +115,7 @@ app.secret_key = 'your_secret_key'
 db_config = {
     'host': 'localhost',
     'user': 'root',
-    'password': '12345678',
+    'password': 'rootroot',
     'database': 'resourceDb'
 }
 
@@ -231,6 +233,9 @@ def show_students():
     connection.close()
 
     return render_template('show_students.html', username=session['admin_username'], students=students)
+@app.route('/faculty_update')
+def faculty_update():
+    return render_template('faculty_update.html')
 
 # Logout route
 @app.route('/logout')
