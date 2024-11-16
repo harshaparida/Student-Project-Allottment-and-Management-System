@@ -11,11 +11,18 @@
         <h1>Welcome, {{ username }}</h1>
     </header>
     <div class="container">
-        <h2>Admin Dashboard</h2>
-        <a href="{{ url_for('add_student') }}">Add Student</a>
-        <a href="{{ url_for('logout') }}">Logout</a>
-        <a href="{{ url_for('show_students') }}">See Students</a>
-        <a href="{{ url_for('faculty_update') }}">Add faculty</a>
+        <nav class="sidebar">
+            <ul>
+                <li><a href="{{ url_for('add_student') }}">Add Student</a></li>
+                <li><a href="{{ url_for('show_students') }}">See Students</a></li>
+                <li><a href="{{ url_for('faculty_update') }}">Add Faculty</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+        <main>
+            <h2>Admin Dashboard</h2>
+            <p>Manage your university's records efficiently.</p>
+        </main>
     </div>
 </body>
 </html>

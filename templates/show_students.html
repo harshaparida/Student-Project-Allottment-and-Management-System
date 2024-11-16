@@ -3,13 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='student.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon"> <!-- Favicon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome -->
     <title>Show Students</title>
 </head>
 <body>
     <header>
         <h1>Welcome, {{ username }}</h1>
     </header>
+
+    <!-- Back Button -->
+    <a href="{{ url_for('admin_dashboard') }}" class="back-button" aria-label="Back">
+        <i class="fas fa-arrow-left"></i> <!-- Font Awesome left arrow icon -->
+    </a>
+
     <div class="container">
         <h2>Student List</h2>
         <table>

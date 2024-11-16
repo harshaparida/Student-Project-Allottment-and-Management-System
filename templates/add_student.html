@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='add_stu_style.css') }}">
     <title>Add Student</title>
 </head>
 <body>
@@ -11,6 +11,11 @@
         <h1>Add Student</h1>
     </header>
     <div class="container">
+        <!-- Back Button -->
+        <a href="{{ url_for('admin_dashboard') }}" class="back-button" title="Go Back">
+            &#8592; <!-- Left arrow symbol -->
+        </a>
+
         <form method="POST" action="{{ url_for('add_student') }}">
             <label for="roll_number">Roll Number</label>
             <input type="text" name="roll_number" required>
@@ -26,6 +31,7 @@
 
             <button type="submit">Add Student</button>
         </form>
+
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <ul>

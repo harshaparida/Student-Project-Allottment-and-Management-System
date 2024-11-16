@@ -1,0 +1,98 @@
+/* fac_update.css */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e9ecef; /* Light background for better contrast */
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #007bff; /* Bootstrap primary color */
+    color: #ffffff;
+    padding: 20px; /* Increased padding for a more spacious header */
+    text-align: center;
+}
+
+.back-button {
+    position: absolute; /* Position relative to the viewport */
+    top: 20px; /* Distance from the top */
+    left: 20px; /* Distance from the left */
+    width: 40px; /* Width of the button */
+    height: 40px; /* Height of the button */
+    background-color: #ff0000; /* Button background color */
+    border-radius: 50%; /* Circular shape */
+    display: flex; /* Flexbox for centering the icon */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    text-decoration: none; /* Remove underline from link */
+    color: white; /* Icon color */
+    font-size: 18px; /* Font size for the icon */
+    transition: background 0.3s; /* Smooth background transition */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+.back-button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+.container {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center align items */
+    margin: 20px auto; /* Center the container */
+    width: 80%; /* Increased width for better layout */
+    max-width: 600px; /* Max width for better responsiveness */
+    background: #ffffff; /* White background for the container */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 30px; /* Increased padding for the container */
+}
+
+h1 {
+    margin-bottom: 20px; /* Space below the heading */
+    font-size: 2.5em; /* Larger font size for headings */
+    color: #333; /* Dark gray for headings */
+    text-align: center; /* Center the heading */
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem; /* More space between form fields */
+}
+
+.form-label {
+    font-weight: bold; /* Make labels bold for better visibility */
+    color: #333; /* Dark gray for labels */
+}
+
+.form-control {
+    border: 1px solid #ced4da; /* Light gray border */
+    border-radius: 0.25rem; /* Rounded corners */
+    padding: 10px; /* Padding inside input fields */
+    transition: border-color 0.3s; /* Smooth transition for border color */
+}
+
+.form-control:focus {
+    border-color: #007bff; /* Change border color on focus */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Shadow effect on focus */
+}
+
+.btn-primary {
+    background-color: #007bff; /* Bootstrap primary color */
+    border-color: #007bff; /* Border color matching the background */
+    padding: 10px 20px; /* Padding for button */
+    font-size: 1.1em; /* Slightly larger font size for button */
+    transition: background-color 0.3s, border-color 0.3s; /* Smooth transition */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+    border-color: #004085; /* Darker border on hover */
+}
+
+/* Optional: Style for flash messages */
+.alert {
+    margin-top: 20px; /* Space above flash messages */
+    width: 100%; /* Full width for alert */
+    max-width: 600px; /* Max width for responsiveness */
+}

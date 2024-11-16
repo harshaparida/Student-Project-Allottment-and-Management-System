@@ -1,62 +1,78 @@
 /* static/styles.css */
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e9ecef; /* Light background for better contrast */
     margin: 0;
     padding: 0;
 }
 
 .container {
-    width: 50%;
-    margin: auto;
+    width: 60%; /* Slightly wider for better layout */
+    margin: 40px auto; /* Added margin for spacing */
     overflow: hidden;
+    background: #ffffff; /* White background for the container */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
 header {
-    background: #35424a;
+    background: #007bff; /* Bootstrap primary color */
     color: #ffffff;
-    padding: 10px 0;
+    padding: 20px 0; /* Increased padding for a more spacious header */
     text-align: center;
+    border-radius: 10px 10px 0 0; /* Rounded top corners */
 }
 
 h1 {
     margin: 0;
+    font-size: 2.5em; /* Larger font size for the title */
 }
 
 form {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 30px; /* Increased padding for form */
 }
 
 label {
     display: block;
-    margin: 10px 0 5px;
+    margin: 15px 0 5px;
+    font-weight: bold; /* Bold labels for emphasis */
+    color: #333; /* Darker color for better readability */
 }
 
 input[type="text"],
 input[type="password"],
 input[type="email"] {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
+    padding: 12px; /* Increased padding for input fields */
+    margin-bottom: 15px; /* More space between fields */
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 1em; /* Uniform font size */
+    transition: border-color 0.3s; /* Smooth transition for focus effect */
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus {
+    border-color: #007bff; /* Change border color on focus */
+    outline: none; /* Remove default outline */
 }
 
 button {
-    background: #35424a;
+    background: #007bff; /* Primary button color */
     color: #ffffff;
     border: none;
-    padding: 10px;
+    padding: 12px 20px; /* Increased padding for buttons */
     border-radius: 5px;
     cursor: pointer;
+    font-size: 1em; /* Uniform font size */
+    transition: background 0.3s, transform 0.3s; /* Transition for hover effects */
 }
 
 button:hover {
-    background: #45a049;
+    background: #0056b3; /* Darker shade on hover */
+    transform: translateY(-2px); /* Slight lift effect on hover */
 }
 
 ul {
@@ -65,8 +81,148 @@ ul {
 }
 
 ul li {
-    background: #35424a;
+    background: #007bff; /* Primary color for list items */
     color: #ffffff;
+    padding: 15px; /* Increased padding for list items */
+    margin: 10px 0; /* More space between items */
+    border-radius: 5px; /* Rounded corners for list items */
+    transition: background 0.3s; /* Transition for hover effect */
+}
+
+ul li:hover {
+    background: #0056b3; /* Darker shade on hover */
+}
+
+.alert {
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 5px;
+    color: #ffffff;
+}
+
+.alert.success {
+    background-color: #28a745; /* Success color */
+}
+
+.alert.danger {
+    background-color: #dc3545; /* Danger color */
+}
+
+/* static/styles.css */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e9ecef; /* Light background for better contrast */
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #007bff; /* Bootstrap primary color */
+    color: #ffffff;
+    padding: 20px 0; /* Increased padding for a more spacious header */
+    text-align: center;
+    position: sticky;
+    top: 0; /* Sticky header */
+    z-index: 1000; /* Ensure it stays above other elements */
+}
+
+.container {
+    display: flex; /* Flexbox for layout */
+    margin: 20px auto; /* Added margin for spacing */
+    width: 80%; /* Increased width for better layout */
+}
+
+.sidebar {
+    width: 250px; /* Fixed width for sidebar */
+    background: #343a40; /* Dark background for sidebar */
+    padding: 20px;
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 15px 0; /* Space between items */
+}
+
+.sidebar ul li a {
+    color: #ffffff; /* White text for links */
+    text-decoration: none;
     padding: 10px;
-    margin: 5px 0;
+    display: block; /* Block display for full clickable area */
+    border-radius: 5px; /* Rounded corners for links */
+    transition: background 0.3s; /* Smooth transition for hover effect */
+}
+
+.sidebar ul li a:hover {
+    background: #007bff; /* Highlight on hover */
+}
+
+main {
+    flex: 1; /* Take up remaining space */
+    padding: 20px; /* Padding for main content */
+    background: #ffffff; /* White background for main content */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin-left: 20px; /* Space between sidebar and main content */
+}
+
+h2 {
+    margin: 0;
+    font-size: 2em; /* Larger font size for headings */
+}
+
+p {
+    font-size: 1.1em; /* Slightly larger font for paragraphs */
+    color: #555; /* Dark gray for text */
+}
+
+/* Animation for sidebar links */
+.sidebar ul li a {
+    position: relative; /* Position for pseudo-element */
+}
+
+.sidebar ul li a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: #007bff; /* Underline color */
+    transform: scaleX(0);
+    transition: transform 0.3s ease; /* Smooth transition */
+}
+
+.sidebar ul li a:hover::after {
+    transform: scaleX(1); /* Underline appears on hover */
+}
+/* static/styles.css */
+
+/* Back Button Styles */
+.back-button {
+    position: absolute; /* Position relative to the viewport */
+    top: 20px; /* Distance from the top */
+    left: 20px; /* Distance from the left */
+    width: 40px; /* Width of the button */
+    height: 40px; /* Height of the button */
+    background-color: #007bff; /* Button background color */
+    color: white; /* Icon color */
+    border-radius: 50%; /* Circular shape */
+    display: flex; /* Flexbox for centering the icon */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    text-decoration: none; /* Remove underline from link */
+    font-size: 1.5em; /* Font size for the arrow */
+    transition: background 0.3s; /* Smooth background transition */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+.back-button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
 }
