@@ -233,68 +233,7 @@ def show_students():
     connection.close()
 
     return render_template('show_students.html', username=session['admin_username'], students=students)
-@app.route('/admin/assign', methods=['GET', 'POST'])
-def assign():
-    if 'admin_username' not in session:
-        return redirect(url_for('home'))
 
-    connection = create_connection()
-    cursor = connection.cursor(dictionary=True)
-
-    students = []
-    groups = []
-    message = None  # To store success or error messages
-
-    if request.method == 'POST':
-        try:
-            # Get the group size from the form
-            group_size = int(request.form.get('group_size', 0))
-
-            # Fetch all students from the database
-            query = "SELECT id, roll_number, username FROM student"
-            cursor.execute(query)
-            students = cursor.fetchall()
-
-            if students and group_size > 0:
-                total_students = len(students)
-                num_groups = -(-total_students // group_size)  # Ceiling division
-
-                # Assign group numbers and update the database
-                group_number = 1
-                for idx, student in enumerate(students):
-                    if idx % group_size == 0 and idx != 0:
-                        group_number += 1
-
-                    update_query = "UPDATE student SET group_number = %s WHERE id = %s"
-                    cursor.execute(update_query, (group_number, student['id']))
-
-                connection.commit()
-
-                # Generate the list of group numbers
-                groups = list(range(1, num_groups + 1))
-
-                message = f"Successfully assigned {num_groups} groups with a maximum size of {group_size} students each."
-            else:
-                message = "Group size must be greater than 0 and students must be available."
-        except Exception as e:
-            connection.rollback()
-            message = f"An error occurred: {str(e)}"
-
-    # Fetch updated student data
-    query = "SELECT roll_number, username, group_number FROM student ORDER BY group_number, roll_number"
-    cursor.execute(query)
-    students = cursor.fetchall()
-
-    cursor.close()
-    connection.close()
-
-    return render_template(
-        'assign.html',
-        username=session['admin_username'],
-        students=students,
-        groups=groups,
-        message=message
-    )
 
 # Route to display the form
 @app.route('/faculty_update', methods=['GET', 'POST'])
