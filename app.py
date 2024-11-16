@@ -233,10 +233,32 @@ def show_students():
     connection.close()
 
     return render_template('show_students.html', username=session['admin_username'], students=students)
-@app.route('/faculty_update')
-def faculty_update():
-    return render_template('faculty_update.html')
 
+# Route to display the form
+@app.route('/faculty_update', methods=['GET', 'POST'])
+def faculty_update():
+    if request.method == 'POST':
+        name = request.form['name']
+
+        if name.strip():  # Validate input
+            try:
+                conn = create_connection()
+                cursor = conn.cursor()
+                # Insert the data into Faculty table
+                cursor.execute("INSERT INTO Faculty (name) VALUES (%s)", (name,))
+                conn.commit()
+                flash("Faculty added successfully!", "success")
+            except mysql.connector.Error as err:
+                flash(f"Error: {err}", "danger")
+            finally:
+                cursor.close()
+                conn.close()
+        else:
+            flash("Name cannot be empty!", "danger")
+
+        return redirect('/faculty_update')
+
+    return render_template('faculty_update.html')
 # Logout route
 @app.route('/logout')
 def logout():

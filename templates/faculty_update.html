@@ -3,88 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Faculty</title>
-    <style>
-        /* Center the form on the page */
-        body, html {
-            height: 100%;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: Arial, sans-serif;
-        }
-
-        /* Styling for the form */
-        form {
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
-
-        label, input {
-            display: block;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-
-        input[type="text"] {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
-    <script>
-        let facultyId = 1;
-
-        function addFaculty(event) {
-            event.preventDefault();
-            const facultyName = document.getElementById('facultyName').value;
-
-            if (facultyName.trim() === '') {
-                alert('Please enter a faculty name.');
-                return;
-            }
-
-            console.log('Faculty ID:', facultyId);
-            console.log('Faculty Name:', facultyName);
-
-            facultyId++;
-            document.getElementById('facultyName').value = '';
-            document.getElementById('facultyId').value = facultyId;
-        }
-
-        window.onload = function() {
-            document.getElementById('facultyId').value = facultyId;
-        };
-    </script>
+    <title>Faculty Update</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 </head>
 <body>
-    <form id="facultyForm" onsubmit="addFaculty(event)">
-        <h2>Add Faculty</h2>
-        <label for="facultyId">Faculty ID:</label>
-        <input type="text" id="facultyId" name="facultyId" readonly><br><br>
+    <div class="container mt-5">
+        <h2>Faculty Update</h2>
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div>
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
 
-        <label for="facultyName">Faculty Name:</label>
-        <input type="text" id="facultyName" name="facultyName" required><br><br>
-
-        <button type="submit">Add Faculty</button>
-    </form>
+        <form method="POST" action="/faculty_update">
+            <div class="mb-3">
+                <label for="name" class="form-label">Faculty Name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
 </body>
 </html>
