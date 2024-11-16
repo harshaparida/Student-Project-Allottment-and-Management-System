@@ -239,13 +239,14 @@ def show_students():
 def faculty_update():
     if request.method == 'POST':
         name = request.form['name']
+        faculty_id = request.form['id']
 
         if name.strip():  # Validate input
             try:
                 conn = create_connection()
                 cursor = conn.cursor()
                 # Insert the data into Faculty table
-                cursor.execute("INSERT INTO Faculty (name) VALUES (%s)", (name,))
+                cursor.execute("INSERT INTO Faculty (id, name) VALUES (%s, %s)", (faculty_id, name))
                 conn.commit()
                 flash("Faculty added successfully!", "success")
             except mysql.connector.Error as err:

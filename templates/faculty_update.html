@@ -22,8 +22,12 @@
 
         <form method="POST" action="/faculty_update">
             <div class="mb-3">
+                <label for="id" class="form-label">Faculty ID</label>
+                <input type="text" class="form-control" id="id" name="id" maxlength="10" required>
+            </div>
+            <div class="mb-3">
                 <label for="name" class="form-label">Faculty Name</label>
-                <input type="text" class="form-control" id="name" name="name" required>
+                <input type="text" class="form-control" id="name" name="name" maxlength="50" required>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
