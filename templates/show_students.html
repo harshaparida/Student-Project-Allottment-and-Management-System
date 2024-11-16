@@ -25,8 +25,8 @@
                 <tr>
                     <th>Roll Number</th>
                     <th>Username</th>
-                    <th>Email</th>
                     <th>CGPA</th>
+                    <th>Group Number</th>
                     <th>Created At</th>
                 </tr>
             </thead>
@@ -35,8 +35,9 @@
                 <tr>
                     <td>{{ student.roll_number }}</td>
                     <td>{{ student.username }}</td>
-                    <td>{{ student.email }}</td>
                     <td>{{ student.cgpa }}</td>
+                    <td>{{ student.group_number }}</td>
+
                     <td>{{ student.created_at }}</td>
                 </tr>
                 {% else %}

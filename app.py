@@ -173,16 +173,16 @@ def add_student():
     if request.method == 'POST':
         roll_number = request.form['roll_number']
         username = request.form['username']
-        email = request.form['email']
+        group_number= request.form['group_number']
         cgpa = request.form['cgpa']
 
         connection = create_connection()
         cursor = connection.cursor()
 
         # Insert new student into the database
-        query = "INSERT INTO student (roll_number, username, email, cgpa) VALUES (%s, %s, %s, %s)"
+        query = "INSERT INTO student (roll_number, username, group_number, cgpa) VALUES (%s, %s, %s, %s)"
         try:
-            cursor.execute(query, (roll_number, username, email, cgpa))
+            cursor.execute(query, (roll_number, username, group_number, cgpa))
             connection.commit()
             flash('Student added successfully!', 'success')
             return redirect(url_for('admin_dashboard'))
