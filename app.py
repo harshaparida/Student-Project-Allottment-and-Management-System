@@ -312,19 +312,41 @@ def add_student():
 
     return render_template('add_student.html')
 
+# @app.route('/preferences')
+# def preferences():
+#     conn = create_connection()  # Use the create_connection function
+#     if conn is not None:
+#         cursor = conn.cursor(dictionary=True)  # Use dictionary=True to get results as dictionaries
+#         cursor.execute('SELECT * FROM group_average_cgpa')
+#         entries = cursor.fetchall()
+#         cursor.close()
+#         conn.close()
+#     else:
+#         entries = []  # If connection failed, return an empty list
+#
+#     return render_template('preferences.html', entries=entries)
+
+
 @app.route('/preferences')
 def preferences():
-    conn = create_connection()  # Use the create_connection function
-    if conn is not None:
-        cursor = conn.cursor(dictionary=True)  # Use dictionary=True to get results as dictionaries
-        cursor.execute('SELECT * FROM group_average_cgpa')
-        entries = cursor.fetchall()
-        cursor.close()
-        conn.close()
-    else:
-        entries = []  # If connection failed, return an empty list
+    group_entries = []
+    faculty_entries = []
 
-    return render_template('preferences.html', entries=entries)
+    try:
+        with create_connection() as conn:
+            with conn.cursor(dictionary=True) as cursor:
+                # Fetch group average CGPA data
+                cursor.execute('SELECT * FROM group_average_cgpa')
+                group_entries = cursor.fetchall()
+
+                # Fetch faculty data
+                cursor.execute('SELECT fac_id, name FROM Faculty')
+                faculty_entries = cursor.fetchall()
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")  # Log the error message
+
+    return render_template('preferences.html', entries=group_entries, faculties=faculty_entries)
+
 
 
 # Logout route

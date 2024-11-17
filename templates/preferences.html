@@ -3,28 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Group Average CGPA</title>
+    <title>Group Average CGPA Preferences</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container">
-        <h1 class="mt-5">Group Average CGPA</h1>
-        <table class="table table-bordered mt-3">
-            <thead>
-                <tr>
-                    <th>Group Number</th>
-                    <th>Average CGPA</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for entry in entries %}
-                <tr>
-                    <td>{{ entry['group_number'] }}</td>
-                    <td>{{ entry['average_cgpa'] }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <h1 class="mt-5">Group Average CGPA Preferences</h1>
+        <form method="POST" action="/submit_preferences">  <!-- Add action to handle form submission -->
+            <table class="table table-bordered mt-3">
+                <thead>
+                    <tr>
+                        <th>Group Number</th>
+                        <th>Average CGPA</th>
+                        {% for faculty in faculties %}
+                        <th>{{ faculty['fac_id'] }} Preference</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in entries %}
+                    <tr>
+                        <td>{{ entry['group_number'] }}</td>
+                        <td>{{ entry['average_cgpa'] }}</td>
+                        {% for faculty in faculties %}
+                        <td>
+                            <select name="{{ faculty['fac_id'] }}_preference_{{ entry['group_number'] }}" class="form-control">
+                                <option value="">Select Faculty</option>
+                                {% for f in faculties %}
+                                <option value="{{ f['fac_id'] }}">{{ f['fac_id'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary">Submit Preferences</button>
+        </form>
     </div>
 </body>
 </html>
