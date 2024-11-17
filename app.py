@@ -101,7 +101,7 @@
 #
 # if __name__ == '__main__':
 #     app.run(debug=True)
-
+from venv import create
 
 from flask import Flask, request, render_template, redirect, url_for, flash, session
 import mysql.connector
@@ -115,7 +115,7 @@ app.secret_key = 'your_secret_key'
 db_config = {
     'host': 'localhost',
     'user': 'root',
-    'password': 'rootroot',
+    'password': '12345678',
     'database': 'resourceDb'
 }
 
@@ -165,34 +165,34 @@ def admin_dashboard():
         return render_template('admin_dashboard.html', username=session['admin_username'])
     return redirect(url_for('home'))
 
-@app.route('/admin/add_student', methods=['GET', 'POST'])
-def add_student():
-    if 'admin_username' not in session:
-        return redirect(url_for('home'))
-
-    if request.method == 'POST':
-        roll_number = request.form['roll_number']
-        username = request.form['username']
-        group_number= request.form['group_number']
-        cgpa = request.form['cgpa']
-
-        connection = create_connection()
-        cursor = connection.cursor()
-
-        # Insert new student into the database
-        query = "INSERT INTO student (roll_number, username, group_number, cgpa) VALUES (%s, %s, %s, %s)"
-        try:
-            cursor.execute(query, (roll_number, username, group_number, cgpa))
-            connection.commit()
-            flash('Student added successfully!', 'success')
-            return redirect(url_for('admin_dashboard'))
-        except Error as e:
-            flash(f'Error: {e}', 'danger')
-        finally:
-            cursor.close()
-            connection.close()
-
-    return render_template('add_student.html')
+# @app.route('/admin/add_student', methods=['GET', 'POST'])
+# def add_student():
+#     if 'admin_username' not in session:
+#         return redirect(url_for('home'))
+#
+#     if request.method == 'POST':
+#         roll_number = request.form['roll_number']
+#         username = request.form['username']
+#         group_number= request.form['group_number']
+#         cgpa = request.form['cgpa']
+#
+#         connection = create_connection()
+#         cursor = connection.cursor()
+#
+#         # Insert new student into the database
+#         query = "INSERT INTO student (roll_number, username, group_number, cgpa) VALUES (%s, %s, %s, %s)"
+#         try:
+#             cursor.execute(query, (roll_number, username, group_number, cgpa))
+#             connection.commit()
+#             flash('Student added successfully!', 'success')
+#             return redirect(url_for('admin_dashboard'))
+#         except Error as e:
+#             flash(f'Error: {e}', 'danger')
+#         finally:
+#             cursor.close()
+#             connection.close()
+#
+#     return render_template('add_student.html')
 
 def add_admin(username, password):
     # Hash the password
@@ -235,6 +235,7 @@ def show_students():
     return render_template('show_students.html', username=session['admin_username'], students=students)
 
 
+
 # Route to display the form
 @app.route('/faculty_update', methods=['GET', 'POST'])
 def faculty_update():
@@ -261,6 +262,71 @@ def faculty_update():
         return redirect('/faculty_update')
 
     return render_template('faculty_update.html')
+
+@app.route('/admin/add_student', methods=['GET', 'POST'])
+def add_student():
+    if 'admin_username' not in session:
+        return redirect(url_for('home'))
+
+    if request.method == 'POST':
+        roll_number = request.form['roll_number']
+        username = request.form['username']
+        group_number = request.form['group_number']
+        cgpa = request.form['cgpa']
+
+        connection = create_connection()
+        cursor = connection.cursor()
+
+        # Insert new student into the database
+        student_query = "INSERT INTO student (roll_number, username, group_number, cgpa) VALUES (%s, %s, %s, %s)"
+        try:
+            cursor.execute(student_query, (roll_number, username, group_number, cgpa))
+            connection.commit()
+
+            # Compute the average CGPA for the group
+            average_query = """
+                SELECT AVG(cgpa) AS average_cgpa 
+                FROM student 
+                WHERE group_number = %s
+            """
+            cursor.execute(average_query, (group_number,))
+            result = cursor.fetchone()
+            average_cgpa = result[0] if result else 0
+
+            # Update the group_average_cgpa table
+            update_query = """
+                INSERT INTO group_average_cgpa (group_number, average_cgpa)
+                VALUES (%s, %s)
+                ON DUPLICATE KEY UPDATE average_cgpa = VALUES(average_cgpa)
+            """
+            cursor.execute(update_query, (group_number, average_cgpa))
+            connection.commit()
+
+            flash('Student added successfully and group average CGPA updated!', 'success')
+            return redirect(url_for('admin_dashboard'))
+        except Error as e:
+            flash(f'Error: {e}', 'danger')
+        finally:
+            cursor.close()
+            connection.close()
+
+    return render_template('add_student.html')
+
+@app.route('/preferences')
+def preferences():
+    conn = create_connection()  # Use the create_connection function
+    if conn is not None:
+        cursor = conn.cursor(dictionary=True)  # Use dictionary=True to get results as dictionaries
+        cursor.execute('SELECT * FROM group_average_cgpa')
+        entries = cursor.fetchall()
+        cursor.close()
+        conn.close()
+    else:
+        entries = []  # If connection failed, return an empty list
+
+    return render_template('preferences.html', entries=entries)
+
+
 # Logout route
 @app.route('/logout')
 def logout():
