@@ -58,6 +58,7 @@
     </style>
 </head>
 <body>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-light mt-3">Back</a>
     <h1>Final Allotment List</h1>
     <ul>
         {% for faculty_id, assignment in group_list.items() %}
