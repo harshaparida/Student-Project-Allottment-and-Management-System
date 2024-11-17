@@ -101,6 +101,7 @@
 #
 # if __name__ == '__main__':
 #     app.run(debug=True)
+import csv
 from venv import create
 
 from flask import Flask, request, render_template, redirect, url_for, flash, session
@@ -312,41 +313,67 @@ def add_student():
 
     return render_template('add_student.html')
 
-# @app.route('/preferences')
-# def preferences():
-#     conn = create_connection()  # Use the create_connection function
-#     if conn is not None:
-#         cursor = conn.cursor(dictionary=True)  # Use dictionary=True to get results as dictionaries
-#         cursor.execute('SELECT * FROM group_average_cgpa')
-#         entries = cursor.fetchall()
-#         cursor.close()
-#         conn.close()
-#     else:
-#         entries = []  # If connection failed, return an empty list
-#
-#     return render_template('preferences.html', entries=entries)
 
 
-@app.route('/preferences')
+def get_group_entries():
+    conn = create_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT group_number, average_cgpa FROM group_average_cgpa")
+    group_entries = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return group_entries
+
+def get_faculty_entries():
+    conn = create_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT fac_id FROM Faculty")
+    faculty_entries = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return faculty_entries
+
+@app.route('/preferences', methods=['GET', 'POST'])
 def preferences():
-    group_entries = []
-    faculty_entries = []
+    if request.method == 'POST':
+        preferences_data = {}
+        group_entries = get_group_entries()
+        faculty_entries = get_faculty_entries()
 
-    try:
-        with create_connection() as conn:
-            with conn.cursor(dictionary=True) as cursor:
-                # Fetch group average CGPA data
-                cursor.execute('SELECT * FROM group_average_cgpa')
-                group_entries = cursor.fetchall()
+        for group in group_entries:
+            group_number = group['group_number']
+            average_cgpa = group['average_cgpa']
+            # Initialize a list for preferences for this group
+            preferences_data[group_number] = {
+                'average_cgpa': average_cgpa,
+                'preferences': []
+            }
 
-                # Fetch faculty data
-                cursor.execute('SELECT fac_id, name FROM Faculty')
-                faculty_entries = cursor.fetchall()
-    except mysql.connector.Error as err:
-        print(f"Error: {err}")  # Log the error message
+            for faculty in faculty_entries:
+                preference = request.form.get(f"{faculty['fac_id']}_preference_{group_number}")
+                if preference:
+                    preferences_data[group_number]['preferences'].append(preference)
 
+        # Write data to CSV
+        with open('preferences.csv', 'w', newline='') as csvfile:
+            fieldnames = ['group_number', 'average_cgpa', 'preferences']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+
+            for group_number, data in preferences_data.items():
+                # Join the preferences into a single string
+                preferences_string = ', '.join(data['preferences'])
+                writer.writerow({
+                    'group_number': group_number,
+                    'average_cgpa': data['average_cgpa'],
+                    'preferences': preferences_string
+                })
+
+        return redirect(url_for('preferences'))
+
+    group_entries = get_group_entries()
+    faculty_entries = get_faculty_entries()
     return render_template('preferences.html', entries=group_entries, faculties=faculty_entries)
-
 
 
 # Logout route

@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h1 class="mt-5">Group Average CGPA Preferences</h1>
-        <form method="POST" action="/submit_preferences">  <!-- Add action to handle form submission -->
+        <form method="POST" action="{{ url_for('preferences') }}">  <!-- Add action to handle form submission -->
             <table class="table table-bordered mt-3">
                 <thead>
                     <tr>
