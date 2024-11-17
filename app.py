@@ -1,110 +1,7 @@
-# from flask import Flask, request, render_template, redirect, url_for, flash, session
-# import mysql.connector
-# from mysql.connector import Error
-# from werkzeug.security import generate_password_hash, check_password_hash
-#
-# app = Flask(__name__)
-# app.secret_key = 'your_secret_key'
-#
-# # MySQL configuration
-# db_config = {
-#     'host': 'localhost',
-#     'user': 'root',
-#     'password': 'rootroot',
-#     'database': 'resourceDb'
-# }
-#
-#
-# # Function to create a database connection
-# def create_connection():
-#     connection = None
-#     try:
-#         connection = mysql.connector.connect(**db_config)
-#         if connection.is_connected():
-#             print("Connection to MySQL DB successful")
-#     except Error as e:
-#         print(f"The error '{e}' occurred")
-#     return connection
-#
-#
-# # Home route
-# @app.route('/')
-# def home():
-#     return render_template('admin_login.html')
-#
-#
-# # Signup route
-# @app.route('/signup', methods=['GET', 'POST'])
-# def signup():
-#     if request.method == 'POST':
-#         username = request.form['username']
-#         password = request.form['password']
-#         email = request.form['email']
-#
-#         # Hash the password
-#         hashed_password = generate_password_hash(password)
-#
-#         connection = create_connection()
-#         cursor = connection.cursor()
-#
-#         # Insert new user into the database
-#         query = "INSERT INTO users (username, password, email) VALUES (%s, %s, %s)"
-#         try:
-#             cursor.execute(query, (username, hashed_password, email))
-#             connection.commit()
-#             flash('Account created successfully! You can now log in.', 'success')
-#             return redirect(url_for('home'))
-#         except Error as e:
-#             flash(f'Error: {e}', 'danger')
-#         finally:
-#             cursor.close()
-#             connection.close()
-#
-#     return render_template('add_student.html')
-#
-#
-# # Login route
-# @app.route('/login', methods=['POST'])
-# def login():
-#     username = request.form['username']
-#     password = request.form['password']
-#
-#     connection = create_connection()
-#     cursor = connection.cursor(dictionary=True)
-#
-#     query = "SELECT * FROM users WHERE username = %s"
-#     cursor.execute(query, (username,))
-#     user = cursor.fetchone()
-#
-#     if user and check_password_hash(user['password'], password):
-#         session['username'] = user['username']
-#         return redirect(url_for('welcome'))
-#     else:
-#         flash('Invalid credentials, please try again.', 'danger')
-#         return redirect(url_for('home'))
-#
-#
-# # Welcome route
-# @app.route('/welcome')
-# def welcome():
-#     if 'username' in session:
-#         return render_template('admin_dashboard.html', username=session['username'])
-#     return redirect(url_for('home'))
-#
-#
-# # Logout route
-# @app.route('/logout')
-# def logout():
-#     session.pop('username', None)
-#     return redirect(url_for('home'))
-#
-#
-# if __name__ == '__main__':
-#     app.run(debug=True)
 import csv
 from venv import create
 
-from flask import Flask, request, render_template, redirect, url_for, flash, session
+from flask import Flask, request, render_template, redirect, url_for, flash, session, send_file
 import mysql.connector
 from mysql.connector import Error
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -166,34 +63,6 @@ def admin_dashboard():
         return render_template('admin_dashboard.html', username=session['admin_username'])
     return redirect(url_for('home'))
 
-# @app.route('/admin/add_student', methods=['GET', 'POST'])
-# def add_student():
-#     if 'admin_username' not in session:
-#         return redirect(url_for('home'))
-#
-#     if request.method == 'POST':
-#         roll_number = request.form['roll_number']
-#         username = request.form['username']
-#         group_number= request.form['group_number']
-#         cgpa = request.form['cgpa']
-#
-#         connection = create_connection()
-#         cursor = connection.cursor()
-#
-#         # Insert new student into the database
-#         query = "INSERT INTO student (roll_number, username, group_number, cgpa) VALUES (%s, %s, %s, %s)"
-#         try:
-#             cursor.execute(query, (roll_number, username, group_number, cgpa))
-#             connection.commit()
-#             flash('Student added successfully!', 'success')
-#             return redirect(url_for('admin_dashboard'))
-#         except Error as e:
-#             flash(f'Error: {e}', 'danger')
-#         finally:
-#             cursor.close()
-#             connection.close()
-#
-#     return render_template('add_student.html')
 
 def add_admin(username, password):
     # Hash the password
@@ -374,6 +243,174 @@ def preferences():
     group_entries = get_group_entries()
     faculty_entries = get_faculty_entries()
     return render_template('preferences.html', entries=group_entries, faculties=faculty_entries)
+
+# actual algorithm
+from flask import Flask, render_template
+import pandas as pd
+import math as Math
+import os
+
+def get_faculty_entries_with_name():
+    conn = create_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT fac_id, name FROM Faculty")
+    faculty_entries = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return faculty_entries
+
+@app.route('/export_faculties', methods=['GET'])
+def export_faculties():
+    faculty_entries = get_faculty_entries_with_name()
+    csv_file_path = os.path.join(os.getcwd(), 'faculties.csv')
+
+    with open(csv_file_path, 'w', newline='') as csvfile:
+        fieldnames = ['fac_id', 'name']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for entry in faculty_entries:
+            print("Entry:", entry)  # Debugging line to see the content of each entry
+            writer.writerow(entry)
+
+    return send_file(csv_file_path, as_attachment=True)
+
+#set capacity by admin
+@app.route('/set_capacity', methods=['GET'])
+def set_capacity():
+    return render_template('set_capacity.html')
+
+@app.route('/allotment', methods=['GET', 'POST'])
+def allotment():
+    if request.method == 'POST':  # Get the capacity from the form
+        capacity = int(request.form['capacity'])
+        # Read students and faculties data from CSV
+        groups_df = pd.read_csv('preferences.csv')
+        faculties_df = pd.read_csv('faculties.csv')
+
+        groups = {}
+        for _, row in groups_df.iterrows():
+            # Use the correct column names from your CSV
+            groups[row['group_number']] = {
+                'average_cgpa': row['average_cgpa'],  # Use the correct column name
+                'preferences': list(map(int, row['preferences'].strip('"').split(', ')))
+                # Convert preferences to a list of integers
+            }
+
+        # Convert faculties DataFrame to dictionary
+        faculties = {}
+        for _, row in faculties_df.iterrows():
+            faculties[row['fac_id']] = {
+                'name': row['name']
+            }
+
+        # Dictionary to hold allocations
+        Initial_choices = {faculties[faculty_id]['name']: [] for faculty_id in faculties}
+
+        # Populate the dictionary based on the first choice of each student group
+        for group_id, group_info in groups.items():
+            id = group_info['preferences'][0]  # Get the first choice
+            name = faculties[id]['name']
+            group_name = group_id  # Get the group name
+            Initial_choices[name].append(group_name)  # Add the group name to the corresponding faculty list
+
+        group_list = {}
+        i = 1
+        for f_name, f_group in Initial_choices.items():
+            # Simulate faculty choices (replace with actual input)
+            m = 1  # Assume the faculty chooses the first group
+            if m == 0 or m > len(f_group):
+                group_list.update({i: {f_name: []}})
+                i += 1
+            else:
+                value = Initial_choices[f_name][m - 1]
+                group_list.update({i: {f_name: [value]}})
+                i += 1
+                Initial_choices[f_name].remove(value)
+
+        unallotted_list = []
+        for f_name, f_group in Initial_choices.items():
+            for i in range(len(f_group)):
+                unallotted_list.append(f_group[i])
+
+        # cgpa_sort = {}
+        # for name in unallotted_list:
+        #     for group in groups.values():
+        #         if group['name'] == name:  # Check if the group name matches
+        #             cgpa_sort.update({name: group['CGPA']})
+        #             break  # Move to the next unallocated group once
+        # cgpa_sort = dict(sorted(cgpa_sort.items(), key=lambda item: item[1], reverse=True))
+        # unallotted_list.clear()
+        # for key in cgpa_sort.keys():
+        #     unallotted_list.append(key)
+
+
+
+
+        # Initialize a dictionary to store CGPA sorted results
+        cgpa_sort = {}
+
+        # Fill cgpa_sort with group names and their corresponding average CGPA
+        for name in unallotted_list:
+            for group_id, group_info in groups.items():
+                if group_id == name:  # Check if the group ID matches
+                    cgpa_sort.update({name: group_info['average_cgpa']})  # Use average_cgpa here
+                    break  # Move to the next unallocated group once found
+
+        # Sort the cgpa_sort dictionary by CGPA in descending order
+        cgpa_sort = dict(sorted(cgpa_sort.items(), key=lambda item: item[1], reverse=True))
+
+        # Clear the unallotted_list and append sorted group names
+        unallotted_list.clear()
+        for key in cgpa_sort.keys():
+            unallotted_list.append(key)
+
+
+
+        # group_choices = {}
+        # for name in unallotted_list:
+        #     for group in groups.values():
+        #         if group['name'] == name:  # Check if the group name matches
+        #             group_choices.update({name: [group['choices']]})
+        #             break  # Move to the next unallocated group once
+        #
+        # capacity = Math.ceil(len(groups) / len(faculties))
+
+
+        group_choices = {}
+
+        # Fill group_choices with group IDs and their corresponding preferences
+        for name in unallotted_list:
+            for group_id, group_info in groups.items():
+                if group_id == name:  # Check if the group ID matches
+                    group_choices.update({name: group_info['preferences']})  # Use preferences here
+                    break  # Move to the next unallocated group once found
+
+
+        # for group, preferences in group_choices.items():
+        #     for preferred_faculty in preferences[0]:
+        #         professor_name = list(group_list[preferred_faculty].keys())[0]
+        #         if len(group_list[preferred_faculty][professor_name]) < capacity:
+        #             group_list[preferred_faculty][professor_name].append(group)
+        #             break  # Once the group is assigned, move to the next group
+
+
+
+        for group, preferences in group_choices.items():
+            for preferred_faculty in preferences:
+                # Get the professor's name from the faculty list
+                professor_name = list(group_list[preferred_faculty].keys())[0]
+
+                # Check if the professor can take more groups
+                if len(group_list[preferred_faculty][professor_name]) < capacity:
+                    group_list[preferred_faculty][professor_name].append(group)  # Assign the group to the professor
+                    break  # Once the group is assigned, move to the next group
+        return render_template('allotment.html', group_list=group_list)
+    return render_template('set_capacity.html')
+
+
+
+
+
 
 
 # Logout route

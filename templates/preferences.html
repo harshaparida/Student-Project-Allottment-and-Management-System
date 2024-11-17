@@ -8,6 +8,7 @@
 </head>
 <body>
     <div class="container">
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-light mt-3">Back</a> <!-- Adjust the URL to your needs -->
         <h1 class="mt-5">Group Average CGPA Preferences</h1>
         <form method="POST" action="{{ url_for('preferences') }}">  <!-- Add action to handle form submission -->
             <table class="table table-bordered mt-3">
@@ -40,6 +41,10 @@
                 </tbody>
             </table>
             <button type="submit" class="btn btn-primary">Submit Preferences</button>
+        </form>
+        <h5>Click here to export faculties in faculties.csv</h5>
+        <form action="/export_faculties" method="get">
+            <button type="submit">Submit faculties</button>
         </form>
     </div>
 </body>
