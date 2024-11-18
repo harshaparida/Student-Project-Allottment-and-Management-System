@@ -2,10 +2,22 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #e9ecef; /* Light background for better contrast */
+    background-color: #6F8FAF; /* Light background for better contrast */
     margin: 0;
     padding: 0;
+    background: url('{{ url_for('static', filename='tree.jpg') }}') no-repeat center/cover;
+    text-align: center;
+
 }
+.ainer {
+    text-align: center; /* Centers text inside the container */
+    padding-top: 200px;
+}
+
+.bold-text {
+    font-weight: bold;
+}
+
 
 .container {
     width: 60%; /* Slightly wider for better layout */
@@ -115,7 +127,11 @@ body {
     background-color: #e9ecef; /* Light background for better contrast */
     margin: 0;
     padding: 0;
+    background: url('{{ url_for('static', filename='tree.jpg') }}') no-repeat center/cover;
+
 }
+
+
 
 header {
     background: #007bff; /* Bootstrap primary color */
@@ -125,6 +141,7 @@ header {
     position: sticky;
     top: 0; /* Sticky header */
     z-index: 1000; /* Ensure it stays above other elements */
+
 }
 
 .container {
@@ -170,6 +187,8 @@ main {
     border-radius: 5px; /* Rounded corners */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
     margin-left: 20px; /* Space between sidebar and main content */
+
+
 }
 
 h2 {

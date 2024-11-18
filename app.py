@@ -13,7 +13,7 @@ app.secret_key = 'your_secret_key'
 db_config = {
     'host': 'localhost',
     'user': 'root',
-    'password': '12345678',
+    'password': 'rootroot',
     'database': 'resourceDb'
 }
 

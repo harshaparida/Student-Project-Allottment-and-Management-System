@@ -6,7 +6,9 @@ body {
     margin: 0;
     padding: 0;
 }
-
+.p{
+    text: bold;
+}
 header {
     background: #007bff; /* Bootstrap primary color */
     color: #ffffff;

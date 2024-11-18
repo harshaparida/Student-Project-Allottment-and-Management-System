@@ -12,19 +12,23 @@
     </header>
     <div class="container">
         <nav class="sidebar">
+
+
             <ul>
                 <li><a href="{{ url_for('add_student') }}">Add Student</a></li>
                 <li><a href="{{ url_for('show_students') }}">See Students</a></li>
                 <li><a href="{{ url_for('faculty_update') }}">Add Faculty</a></li>
-                <li><a href="{{ url_for('preferences') }}">Prefrences</a></li>
+                <li><a href="{{ url_for('preferences') }}">Preferences</a></li>
                 <li><a href="{{ url_for('allotment') }}">Allocate</a></li>
 
                 <li><a href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
         </nav>
         <main>
-            <h2>Admin Dashboard</h2>
-            <p>Manage your university's records efficiently.</p>
+            <div class="ainer">
+            <h1>STUDENT PROJECT ALLOTMENT AND MANAGEMENT SYSTEM</h1>
+            <p class="bold-text">Manage your university's projects efficiently</p>
+            </div>
         </main>
     </div>
 </body>
