@@ -182,7 +182,28 @@ def add_student():
 
     return render_template('add_student.html')
 
+@app.route('/admin/delete_all_students', methods=['POST'])
+def delete_all_students():
+    if 'admin_username' not in session:
+        return redirect(url_for('home'))
 
+    connection = create_connection()
+    cursor = connection.cursor()
+
+    try:
+        # Delete all entries from the student table
+        delete_query = "DELETE FROM student"
+        cursor.execute(delete_query)
+        connection.commit()
+
+        flash('All student records have been deleted successfully!', 'success')
+    except Error as e:
+        flash(f'Error: {e}', 'danger')
+    finally:
+        cursor.close()
+        connection.close()
+
+    return redirect(url_for('admin_dashboard'))
 
 
 def get_group_entries():

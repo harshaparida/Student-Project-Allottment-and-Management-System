@@ -73,6 +73,24 @@ button:hover {
     transform: translateY(-2px); /* Slight lift effect on hover */
 }
 
+/* Delete Button Styles */
+.btn-danger {
+    display: inline-block; /* To allow padding and margins */
+    background: #dc3545; /* Bootstrap danger color */
+    color: #ffffff;
+    padding: 12px 20px; /* Padding for the button */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* Remove underline */
+    text-align: center; /* Center text */
+    margin-top: 20px; /* Space above the button */
+    transition: background 0.3s, transform 0.3s; /* Transition for hover effects */
+}
+
+.btn-danger:hover {
+    background: #c82333; /* Darker shade on hover */
+    transform: translateY(-2px); /* Slight lift effect on hover */
+}
+
 /* Alert Messages */
 ul {
     list-style-type: none;
@@ -123,12 +141,12 @@ ul li:hover {
     justify-content: center; /* Center horizontally */
     text-decoration: none; /* Remove underline from link */
     font-size: 1.5em; /* Font size for the arrow */
-    transition: background 0.3s; /* Smooth background transition
+    transition: background 0.3s; /* Smooth background transition */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
 }
 
 .back-button:hover {
-    background-color: #0056b3; /* Darker shade on hover */
+    background-color: #c82333; /* Darker shade on hover */
 }
 
 /* Responsive Styles */
@@ -142,7 +160,8 @@ ul li:hover {
         font-size: 1.5em; /* Smaller font size for the header */
     }
 
-    button {
+    button,
+    .btn-danger {
         width: 100%; /* Full width for buttons on smaller screens */
     }
 
