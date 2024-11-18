@@ -13,7 +13,7 @@ app.secret_key = 'your_secret_key'
 db_config = {
     'host': 'localhost',
     'user': 'root',
-    'password': 'rootroot',
+    'password': '12345678',
     'database': 'resourceDb'
 }
 
@@ -184,6 +184,7 @@ def add_student():
 
 
 
+
 def get_group_entries():
     conn = create_connection()
     cursor = conn.cursor(dictionary=True)
@@ -196,7 +197,7 @@ def get_group_entries():
 def get_faculty_entries():
     conn = create_connection()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT fac_id FROM Faculty")
+    cursor.execute("SELECT fac_id,id, name FROM Faculty")
     faculty_entries = cursor.fetchall()
     cursor.close()
     conn.close()

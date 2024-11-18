@@ -6,7 +6,56 @@
     <title>Group Average CGPA Preferences</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='add_stu_style.css') }}">
+    <style>
+        body {
+    background-color: #f8f9fa; /* Light background color */
+    font-family: Arial, sans-serif; /* Change font */
+}
+
+.container {
+    background-color: white; /* White background for the container */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 20px; /* Padding around the container */
+}
+
+h1 {
+    color: #007bff; /* Primary color for the heading */
+    text-align: center; /* Center the heading */
+}
+
+.back-button {
+    margin-bottom: 20px; /* Space below the back button */
+    font-size: 1.2em; /* Increase font size */
+}
+
+table {
+    margin-top: 20px; /* Space above the table */
+}
+
+th {
+    background-color: #007bff; /* Header background color */
+    color: white; /* Header text color */
+}
+
+td {
+    vertical-align: middle; /* Center content vertically */
+}
+
+.btn-primary {
+    width: 100%; /* Full width button */
+    margin-top: 20px; /* Space above the button */
+}
+
+h5 {
+    text-align: center; /* Center the export link */
+    margin-top: 30px; /* Space above the export link */
+}
+
+select.form-control {
+    border-radius: 5px; /* Rounded select box */
+}
+    </style>
 </head>
 <body>
 
@@ -26,7 +75,7 @@
                         <th>Group Number</th>
                         <th>Average CGPA</th>
                         {% for faculty in faculties %}
-                        <th>{{ faculty['fac_id'] }} Preference</th>
+                        <th>Preference {{ faculty['fac_id'] }}</th>
                         {% endfor %}
                     </tr>
                 </thead>
@@ -40,7 +89,7 @@
                             <select name="{{ faculty['fac_id'] }}_preference_{{ entry['group_number'] }}" class="form-control">
                                 <option value="">Select Faculty</option>
                                 {% for f in faculties %}
-                                <option value="{{ f['fac_id'] }}">{{ f['fac_id'] }}</option>
+                                <option value="{{ f['fac_id'] }}">{{ f['id'] }} - {{ f['name'] }}</option>
                                 {% endfor %}
                             </select>
                         </td>
